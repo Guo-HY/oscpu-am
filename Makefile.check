@@ -21,6 +21,13 @@ ARCH_SPLIT  = $(subst -, ,$(ARCH))
 ISA        ?= $(word 1,$(ARCH_SPLIT))
 PLATFORM   ?= $(word 2,$(ARCH_SPLIT))
 
+## Check: Environment variable $LA32RTC_HOME must exist when target is la32r
+ifeq ($(ISA), la32r)
+    ifeq ($(LA32RTC_HOME),)
+    $(error Environment variable LA32RTC_HOME must be defined when target is la32r.)
+    endif
+endif
+
 include $(AM_HOME)/am/arch/$(ARCH).mk
 
 endif
