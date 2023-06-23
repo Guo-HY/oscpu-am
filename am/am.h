@@ -15,6 +15,10 @@ extern "C" {
 #endif
 
 // ===================== Constants and Structs =======================
+// typedef unsigned long uintptr_t;
+// typedef long intptr_t;
+// typedef unsigned long size_t;
+// typedef unsigned int uint32_t;
 
 enum {
   _EVENT_NULL = 0,

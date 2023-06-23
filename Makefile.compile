@@ -20,6 +20,12 @@ CFLAGS   += -O2 -MMD -Wall -Werror -ggdb $(INCLUDES) \
 CXXFLAGS +=  $(CFLAGS) -ffreestanding -fno-rtti -fno-exceptions
 ASFLAGS  += -MMD $(INCLUDES)
 
+# -MMD : Like -MD except mention only user header files, not system header files.
+#  -MD can be used to generate a dependency output file as a side effect of the compilation process.
+# -ggdb : Produce debugging information for use by GDB.
+# -D : define macro : https://www.cnblogs.com/amanlikethis/p/3423857.html
+# other commands maybe unimportant
+
 ## Compliation rule for .c -> .o (using gcc)
 $(DST_DIR)/%.o: %.c
 	@mkdir -p $(dir $@) && echo + CC $<

@@ -12,6 +12,8 @@ default: $(ARCHIVE)
 INC_DIR += $(addsuffix /include/, $(addprefix $(AM_HOME)/libs/, $(LIBS)))
 CFLAGS  += -fdata-sections -ffunction-sections -fno-builtin
 
+# -fno-builtin : do not use buildin function
+
 ## Paste in "Makefile.compile" here
 include $(AM_HOME)/Makefile.compile
 

@@ -1,6 +1,6 @@
-include $(AM_HOME)/am/arch/isa/riscv64.mk
+include $(AM_HOME)/am/arch/isa/la32r.mk
 
-AM_SRCS := nutshell/isa/riscv/trm.c \
+AM_SRCS := nutshell/isa/la32r/trm.c \
            nutshell/common/mainargs.S \
            nutshell/common/uartlite.c \
            nutshell/common/ioe.c \
@@ -11,16 +11,16 @@ AM_SRCS := nutshell/isa/riscv/trm.c \
            dummy/cte.c \
            dummy/vme.c \
            dummy/mpe.c \
-           nutshell/isa/riscv/boot/start.S
+           nutshell/isa/la32r/boot/start.S
 
-CFLAGS  += -I$(AM_HOME)/am/src/nutshell/include -DISA_H=\"riscv.h\"
+CFLAGS  += -I$(AM_HOME)/am/src/nutshell/include -DISA_H=\"la32r.h\"
 
 ASFLAGS += -DMAINARGS=\"$(mainargs)\"
 .PHONY: $(AM_HOME)/am/src/nutshell/common/mainargs.S
 # -L searchdir : Add path searchdir to the list of paths that ld will search for archive libraries and ld control scripts.
 # -T scriptfile :  Use scriptfile as the linker script. 
 LDFLAGS += -L $(AM_HOME)/am/src/nutshell/ldscript
-LDFLAGS += -T $(AM_HOME)/am/src/nutshell/isa/riscv/boot/loader64.ld
+LDFLAGS += -T $(AM_HOME)/am/src/nutshell/isa/la32r/boot/loader.ld
 
 image:
 	@echo + LD "->" $(BINARY_REL).elf
@@ -37,6 +37,3 @@ image:
 #  -S --strip-all : Do not copy relocation and symbol information from the source file.
 #  -O bfdname --output-target=bfdname : Write the output file using the object format bfdname.
 # --set-section-flags sectionpattern=flags : Set the flags for any sections matching sectionpattern
-
-run:
-	$(MAKE) -C $(NUTSHELL_HOME) emu IMAGE="$(BINARY).bin" DATAWIDTH=64

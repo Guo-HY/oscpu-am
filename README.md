@@ -1,17 +1,5 @@
 # The Abstract Machine (AM)
 
-## 注意
-
-这是一个临时的仓库，仅用于支持NutShell运行一些基本的程序。
-
-AM项目是[南京大学计算机系若干课程实验](https://github.com/NJU-ProjectN/)的一部分，
-本仓库将与课程作业相关的若干.c文件替换成.o文件，具体包括
-```
-libs/klib/src/{stdio,stdlib,string}.o
-```
-
-upstream正在重构，预计可在2020/09/01前完成重构，届时再从upstream中fork一个分支来支持NutShell。
-
 ## 介绍
 
 抽象计算机：必要的抽象，帮你编写一个完整的计算机系统！
@@ -44,3 +32,16 @@ include $(AM_HOME)/Makefile.app
 * 环境变量`AM_HOME`需要包含**nexus-am项目的根目录的绝对路径**。
 
 编译时，首先确保`AM_HOME`正确设置，然后执行`make ARCH=体系结构名`编译。例如`make ARCH=native`将会编译成本地可运行的项目，`make ARCH=mips32-minimal`生成用于仿真的MIPS32程序。`ARCH`缺省时默认编译到本地。
+
+## 适配 la32r
+
+* 设置 la32r 编译器与库的环境变量：将 `loongarch32r-linux-gnusf-2022-05-20` 与 `system_newlib` 放在一个文件夹 `la32r-toolchains` 下，并将 `$LA32RTC_HOME` 环境变量设置为 `la32r-toolchains` 目录。
+
+```
+├── la32r-toolchains
+│   ├── loongarch32r-linux-gnusf-2022-05-20
+│   └── system_newlib
+```
+
+* 在合适的地方使用 `make ARCH=la32r-nutshell` 命令编译 la32r 架构 workload。
+* 注意：在 `$AM_HOME` 下 `make ARCH=la32r-nutshell` 只会生成 am 的 archive 文件，在 `amtests`，`cputests`，或 `apps` 下文件夹中 `make ARCH=la32r-nutshell` 可以生成 elf，bin 及反汇编文件。
