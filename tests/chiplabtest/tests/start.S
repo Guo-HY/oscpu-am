@@ -15,11 +15,11 @@
 ##s2, exception use
 ##s3, score
 ##s4, exception pc
-	.globl	_start
-	.globl	start
-	.globl	__main
-_start:
-start:
+	.globl	main
+	// .globl	start
+	// .globl	__main
+main:
+// start:
     li.w     t0, 0xffffffff
     addi.w t0, zero, -1
 #ifdef CSR_INIT
