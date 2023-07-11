@@ -10,4 +10,6 @@
 # define SYNC_ADDR    0x40001004
 # define FB_ADDR      0x50000000
 
+#define CONFREG_TIMER_ADDR    0xbfafe000 // see chiplab/IP/CONFREG/confreg_sim.v line 94
+
 #endif
