@@ -150,8 +150,8 @@
 	({                                                         \
 		unsigned int __v = (unsigned int)(val);          \
 		__asm__ __volatile__("csrwr %0, " __ASM_STR(csr)  \
-				     :                             \
-				     : "r"(__v)                   \
+				     : "+r"(__v)                           \
+				     :                    \
 				     : "memory");                  \
 	})
 
@@ -161,8 +161,8 @@
 		unsigned int __v = (unsigned int)(val);          \
         unsigned int __wmask = (unsigned int)(wmask);          \
 		__asm__ __volatile__("csrxchg %0, %1, " __ASM_STR(csr)  \
-				     :                             \
-				     : "r"(__v), "r"(__wmask)                   \
+				     : "+r"(__v)                          \
+				     : "r"(__wmask)                   \
 				     : "memory");                  \
 	})
 
