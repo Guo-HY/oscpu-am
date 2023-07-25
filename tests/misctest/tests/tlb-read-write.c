@@ -110,7 +110,7 @@ void write_tlb(uint32_t index, struct tlb_struct entry)
 
 }
 
-int tlb_find(uint32_t asid, uint32_t vaddr)
+int tlb_find(uint32_t asid, uint32_t vaddr, uint32_t G)
 {
     bool find = false;
     int index = -1;
@@ -118,24 +118,34 @@ int tlb_find(uint32_t asid, uint32_t vaddr)
 
     for (int i = 0; i < TLB_ENTRY_NUM; i++) {
         if (tlb[i].hi.E) {
-            if (tlb[i].hi.G == 1 || tlb[i].hi.ASID == asid) {
-                if (tlb[i].hi.PS == 12 && (vaddr >> 13) == tlb[i].hi.VPPN) {
+            if (G == 1 || tlb[i].hi.G == 1 || tlb[i].hi.ASID == asid) {
+                // TODO : use more narrow condition
+                // if (tlb[i].hi.PS == 12 && (vaddr >> 13) == tlb[i].hi.VPPN) {
+                //     if (find == true) {
+                //         printf("tlb multi hit!\n");
+                //         _halt(1);
+                //     }
+                //     find = true;
+                //     index = i;
+                // } else if (tlb[i].hi.PS == 21 && (vaddr >> 22) == (tlb[i].hi.VPPN >> 9)) {
+                //     if (find == true) {
+                //         printf("tlb multi hit!\n");
+                //         _halt(i);
+                //     }
+                //     find = true;
+                //     index = i;
+                // } 
+                if ((vaddr >> 13) == tlb[i].hi.VPPN) {
                     if (find == true) {
                         printf("tlb multi hit!\n");
-                        nemu_assert(false);
+                        _halt(i);
                     }
                     find = true;
                     index = i;
-                } else if (tlb[i].hi.PS == 21 && (vaddr >> 22) == (tlb[i].hi.VPPN >> 9)) {
-                    if (find == true) {
-                        printf("tlb multi hit!\n");
-                        nemu_assert(false);
-                    }
-                    find = true;
-                    index = i;
-                } else {
+                }
+                else if (tlb[i].hi.PS != 21 && tlb[i].hi.PS != 12) {
                     printf("tlb ps should be 12 or 21!\n");
-                    nemu_assert(false);
+                    _halt(3);
                 }
             }
         }
@@ -149,13 +159,14 @@ struct tlb_struct gen_rand_tlb_entry()
     struct tlb_struct entry;
     uint32_t asid = rand();
     uint32_t vaddr = rand();
-    while (tlb_find(asid, vaddr) != -1) {
+    entry.hi.G = gen_random_bool();
+    while (tlb_find(asid, vaddr, entry.hi.G) != -1) {
         asid = rand();
         vaddr = rand();
+        entry.hi.G = gen_random_bool();
     }
     entry.hi.E = gen_random_bool();
     entry.hi.ASID = asid;
-    entry.hi.G = gen_random_bool();
     entry.hi.PS = gen_random_tlb_ps();
     entry.hi.VPPN = vaddr >> 13;
 
