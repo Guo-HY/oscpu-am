@@ -100,6 +100,8 @@
 #define TLBIDX_PS_OFFSET     24
 #define TLBIDX_NE_OFFSET     31
 
+#define TLBEHI_VPPN_OFFSET   13
+
 #define TLBELO_D_OFFSET      1
 #define TLBELO_PLV_OFFSET    2
 #define TLBELO_MAT_OFFSET    4
@@ -165,5 +167,57 @@
 				     : "r"(__wmask)                   \
 				     : "memory");                  \
 	})
+
+#define TLB_ENTRY_NUM 32
+
+#define tlbsrch() __asm__ __volatile__("tlbsrch": : : "memory")
+
+#define tlbrd() __asm__ __volatile__("tlbrd" : : : "memory")
+
+#define tlbwr() __asm__ __volatile__("tlbwr" : : : "memory")
+
+#define tlbfill() __asm__ __volatile("tlbfill" : : : "memory")
+
+#define invtlb(op, asid, va)                                        \
+	({                                                         \
+		unsigned int __asid = (unsigned int)(asid);          \
+		unsigned int __va = (unsigned int)(va);          \
+		__asm__ __volatile__("invtlb " __ASM_STR(op) ", %0, %1"  \
+				     :                            \
+				     : "r"(__asid), "r"(__va)                   \
+				     : "memory");                  \
+	})
+
+#pragma pack(8)
+typedef union {
+  struct {
+    uint32_t E    : 1;
+    uint32_t ASID : 10;
+    uint32_t G    : 1;
+    uint32_t PS   : 6;
+    uint32_t VPPN : 19;
+    uint32_t      : 27;    
+  };
+  uint64_t val;
+} EntryHi;
+#pragma pack()
+
+typedef union {
+  struct {
+    uint32_t V     : 1;
+    uint32_t D     : 1;
+    uint32_t MAT   : 2;
+    uint32_t PLV   : 2;
+    uint32_t PPN   : 24;
+    uint32_t pad0  : 2;
+  };
+  uint32_t val;  
+} EntryLo;
+
+struct tlb_struct{
+  EntryHi hi;
+  EntryLo lo[2];
+} ;
+
 
 #endif
