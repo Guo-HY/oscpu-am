@@ -20,7 +20,7 @@
 #define TEST6 1
 #define TEST7 1
 #define TEST8 1
-#define TEST9 0
+#define TEST9 1
 
 #define RUN_SIMU   1
 
