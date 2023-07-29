@@ -3,6 +3,7 @@
 #include <nutshell.h>
 
 int ret = 0;
+volatile int array[1];
 
 #define mmiocheck(cond) \
     do { \
@@ -48,9 +49,11 @@ int main()
     outl(CONFREG_NUM_MONITOR_ADDR, 0xfffffffe);
     result = inl(CONFREG_NUM_MONITOR_ADDR);
     mmiocheck(result == 0);
-
+    ret = 1;
     if (ret) {
       printf("confreg test fail!\n");
+      array[0] = 0;
+      ret = result / array[0]; // nemu should assert fail
     } else {
       printf("confreg test pass!\n");
     }
