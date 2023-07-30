@@ -1,4 +1,4 @@
-#include "trap.h"
+#include "../include/trap.h"
 
 
 // test csrrd, csrwr, csrxchg read write func
@@ -27,12 +27,15 @@ int main()
 
     printf("begin csr-read-write test, need enable csr diff!\n");
 
-    //crmd
+    //crmd disable cache
     rdata += csr_read(csr_crmd);
     csr_masked_write(csr_crmd, full, CRMD_IE_MASK);
     csr_masked_write(csr_crmd, 1 << CRMD_DATF_OFFSET, CRMD_DATF_MASK);
     csr_masked_write(csr_crmd, 1 << CRMD_DATM_OFFSET, CRMD_DATM_MASK);
     csr_write(csr_crmd, 1 << CRMD_DA_OFFSET);
+
+    // flush dcache to memory
+    __asm__ __volatile__("ibar 0" : : : "memory");
 
     // prmd
     rdata += csr_read(csr_prmd);

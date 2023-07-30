@@ -49,7 +49,7 @@ int main()
     outl(CONFREG_NUM_MONITOR_ADDR, 0xfffffffe);
     result = inl(CONFREG_NUM_MONITOR_ADDR);
     mmiocheck(result == 0);
-    ret = 1;
+
     if (ret) {
       printf("confreg test fail!\n");
       array[0] = 0;
