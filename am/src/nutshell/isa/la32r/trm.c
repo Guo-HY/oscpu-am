@@ -33,7 +33,9 @@ void _halt(int code) {
 
 inline void _cache_init()
 {
-  __asm__ __volatile__("ibar 0" : : : "memory");
+  // invalid icache & dcache, just need two insts due to hardware implementation
+  __asm__ __volatile__("cacop 0, $r0, 0" : : : "memory");
+  __asm__ __volatile__("cacop 1, $r0, 0" : : : "memory");
 }
 
 // dmw0 map va : 0xa0000000 - 0xbfffffff -> pa : 0xa0000000 - 0xbfffffff (SUC PLV0 PLV3)
