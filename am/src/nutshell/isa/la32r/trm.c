@@ -1,6 +1,7 @@
 #include <am.h>
 #include <la32r.h>
 #include <klib.h>
+#include <la32r-csr.h>
 
 extern char _heap_start;
 extern char _pmem_end;
@@ -30,8 +31,27 @@ void _halt(int code) {
   while (1);
 }
 
+inline void _cache_init()
+{
+  __asm__ __volatile__("ibar 0" : : : "memory");
+}
+
+// dmw0 map va : 0xa0000000 - 0xbfffffff -> pa : 0xa0000000 - 0xbfffffff (SUC PLV0 PLV3)
+// dmw1 map va : 0x0 - 0x1fffffff -> pa : 0x0 - 0x1fffffff (CC PLV0 PLV3)
+inline void _dmw_init()
+{
+  uint32_t dmw0 = 1 | (1 << DMW_PLV3_OFFSET) | (STRONGLY_ORDERED_UNCACHED << DMW_MAT_OFFSET) | (5 << DMW_PSEG_OFFSET) | (5 << DMW_VSEG_OFFSET);
+  uint32_t dmw1 = 1 | (1 << DMW_PLV3_OFFSET) | (COHERENT_CACHED << DMW_MAT_OFFSET) | (0 << DMW_PSEG_OFFSET) | (0 << DMW_VSEG_OFFSET);
+  csr_write(csr_dmw0, dmw0);
+  csr_write(csr_dmw1, dmw1);
+
+  csr_masked_write(csr_crmd, (0 << CRMD_DA_OFFSET) | (1 << CRMD_PG_OFFSET) | (1 << CRMD_DATF_OFFSET) | (1 << CRMD_DATM_OFFSET), CRMD_DA_MASK | CRMD_PG_MASK | CRMD_DATF_MASK | CRMD_DATM_MASK);
+}
+
 void _trm_init() {
   __am_init_uartlite();
+  _cache_init();
+  _dmw_init();
   extern const char __am_mainargs;
   int ret = main(&__am_mainargs);
   _halt(ret);

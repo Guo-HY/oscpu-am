@@ -133,6 +133,9 @@
 #define FPE_ECODE   0x12
 #define TLBR_ECODE  0x3f
 
+#define STRONGLY_ORDERED_UNCACHED 0
+#define COHERENT_CACHED           1
+
 // csr R/W copy and modify from nexus-am
 #define __ASM_STR(x)	#x
 
