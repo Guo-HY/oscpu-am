@@ -64,7 +64,7 @@ int main()
     }
 
     for (int i = 0; i < 5; i++) {
-        __asm__ __volatile__(" cacop 1, %0, 0 " : "=r"(i) : : "memory");
+        __asm__ __volatile__(" cacop 9, %0, 0 " : "=r"(i) : : "memory");
 
         read();
     }
