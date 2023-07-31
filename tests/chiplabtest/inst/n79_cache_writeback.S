@@ -77,6 +77,8 @@ start:
     addi.w    t1, t1, 0x1 
     bne       t1, t2, 2b
  
+    ibar      0  # writeback dcache
+
     li.w        t0, 0xd0100000
 # set up the DMW, let the MAT=00(Strongly-Ordered UnCached)
     li.w        t1, 0xe0000000
