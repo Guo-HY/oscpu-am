@@ -35,6 +35,9 @@ start:
     li.w $r25, 0xbfaf8ffc
     st.w $r0, $r25, 0
 
+    # invalid icache & dcache, just need two insts due to hardware implementation
+    cacop   0, $r0, 0
+    cacop   1, $r0, 0
 
     csrwr	$r0,0x180
     csrwr	$r0,0x181
@@ -61,6 +64,7 @@ start:
 
 .org 0x100
 test_finish:
+    syscall   0x11 # customize trap inst
     addi.w    t0, t0, 1
     li.w      t2, UART_ADDR
     st.w      zero, t2, 0
