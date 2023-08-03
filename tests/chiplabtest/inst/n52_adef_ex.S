@@ -122,6 +122,8 @@ LEAF(n52_adef_ex_test)
   li.w      t0, 0x3
   csrxchg t0, t0, csr_crmd  //usr mode
 
+  // TODO : need insert ibar,dbar make icache & dcache sync
+
   li.w      t0, 0xd0010
   li.w      t1, 0x4c000020
   st.w    t1, t0, 0 

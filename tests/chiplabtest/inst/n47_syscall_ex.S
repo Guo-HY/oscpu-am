@@ -13,7 +13,7 @@ LEAF(n47_syscall_ex_test)
   //init usr mode
   li.w      t0, 0x3
   li.w      t1, 0x7 
-  csrxchg t0, t1, csr_crmd 
+  csrxchg t0, t1, csr_crmd // write crmd.ie = 0(disable interrupt), crmd.plv=3(user mode)
   lu12i.w s7, 0x10 
   li.w      t5, 0x3 //used for verify prmd 
 

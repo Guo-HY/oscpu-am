@@ -1,6 +1,6 @@
 #include "trap.h"
 #include <la32r.h>
-#include <nutshell.h>
+#include <eula.h>
 
 int ret = 0;
 volatile int array[1];

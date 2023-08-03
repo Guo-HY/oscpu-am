@@ -1,6 +1,6 @@
 #include <am.h>
 #include <amdev.h>
-#include <nutshell.h>
+#include <eula.h>
 #include <klib.h>
 
 static unsigned long boot_time = 0;

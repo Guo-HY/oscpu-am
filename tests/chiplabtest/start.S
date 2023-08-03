@@ -23,8 +23,8 @@ start:
     li.w     t0, 0xffffffff
     addi.w t0, zero, -1
 #ifdef CSR_INIT
-    ori    $r1,$r0,0x28
-    csrwr  $r1,0x0
+    ori    $r1,$r0,0x28     # b 10 1000
+    csrwr  $r1,0x0          # write crmd.da=1, crmd=datf=1
 #endif
 	b	locate
 
@@ -101,21 +101,21 @@ test_finish:
 syscall_ex:
     add.w    s2, zero, zero
     csrrd    t0, csr_era 
-    bne      s4, t0, ex_finish 
+    bne      s4, t0, ex_finish // s4 should be syscall inst addr(equal to era)
     csrrd    t0, csr_estat 
     li.w       t1, 0x7fff0000 
     and      t0, t0, t1 
     li.w       t1, 0x000b0000 
-    bne      t1, t0, ex_finish 
+    bne      t1, t0, ex_finish // check estat.ecode=0xb, estat.esubcode=0(syscall)
     csrrd    t0, csr_crmd 
     li.w       t1, 0x7 
     and      t0, t0, t1 
     li.w       t1, 0x0 
-    bne      t1, t0, ex_finish
+    bne      t1, t0, ex_finish // check crmd.plv=0, crmd.ie=0
     csrrd    t0, csr_prmd 
     li.w       t1, 0x7 
     and      t0, t0, t1 
-    bne      t0, t5, ex_finish 
+    bne      t0, t5, ex_finish // check prmd.plv=3, prmd.ie=0
     lu12i.w  s2, 0x10 
     b        ex_finish  
 
@@ -497,10 +497,10 @@ locate:
     lu12i.w   s3, 0
     NOP4
 
-    st.w      t1, a0, 0
-    st.w      t2, a1, 0
-    st.w      t3, a2, 0
-    st.w      s3, s1, 0
+    st.w      t1, a0, 0 // set LED_RG1_ADDR = 2
+    st.w      t2, a1, 0 // set LED_RG0_ADDR = 1
+    st.w      t3, a2, 0 // set LED_ADDR = ffff
+    st.w      s3, s1, 0 // set NUM_ADDR = ffff
     lu12i.w   s0, 0
     NOP4
 inst_test: 

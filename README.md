@@ -43,5 +43,5 @@ include $(AM_HOME)/Makefile.app
 │   └── system_newlib
 ```
 
-* 在合适的地方使用 `make ARCH=la32r-nutshell` 命令编译 la32r 架构 workload。
-* 注意：在 `$AM_HOME` 下 `make ARCH=la32r-nutshell` 只会生成 am 的 archive 文件，在 `amtests`，`cputests`，或 `apps` 下文件夹中 `make ARCH=la32r-nutshell` 可以生成 elf，bin 及反汇编文件。
+* 在合适的地方使用 `make ARCH=la32r-eula` 命令编译 la32r 架构 workload。
+* 注意：在 `$AM_HOME` 下 `make ARCH=la32r-eula` 只会生成 am 的 archive 文件，在 `amtests`，`cputests`，或 `apps` 下文件夹中 `make ARCH=la32r-eula` 可以生成 elf，bin 及反汇编文件。
