@@ -33,6 +33,9 @@ convert: linux_convert.c
 
 all:init start linux convert
 	./linux_convert
+	rm -f $(BUILD_PATH)/vmlinux.bin
+	rm -f $(BUILD_PATH)/start.bin
+	rm -f linux_convert
 
 
 clean:
