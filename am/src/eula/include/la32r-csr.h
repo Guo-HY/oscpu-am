@@ -222,5 +222,21 @@ struct tlb_struct{
   EntryLo lo[2];
 } ;
 
+// src1 in $t0($r12), src2 in $t1($r13), dest in $t2($r14)
+#define newinst(src1, src2, inst)     \
+({                                    \
+    register unsigned int __dest;        \
+    register unsigned int __src1 = (unsigned int)src1; \
+    register unsigned int __src2 = (unsigned int)src2; \
+    __asm__ __volatile__("add.w $t0, %[src1], $zero\n\t"        \
+                         "add.w $t1, %[src2], $zero\n\t"        \
+                         ".word " __ASM_STR(inst) "\n\t"         \
+                         "add.w %[dest], $t2, $zero\n\t"        \
+                         : [dest] "=r" (__dest)                   \
+                         : [src1] "r" (__src1), [src2] "r" (__src2) \
+                         : "$t0", "$t1", "$t2"                  \
+     );                                                         \
+      __dest;                                                     \
+})
 
 #endif
